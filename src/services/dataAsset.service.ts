@@ -1,22 +1,36 @@
 import fs from 'fs';
 import path from 'path';
 import { BASE_FILE_PATH } from '../config/loader';
+import { fileValidationService } from './fileValidation.service';
+import { AppError } from '../utils/errors/custom.error';
 
-function getContentType(filename: string) {
-  if (filename.endsWith('.json')) return 'application/json';
-  if (filename.endsWith('.txt')) return 'text/plain';
-  if (filename.endsWith('.csv')) return 'text/csv';
-  // extend as needed
-  return 'application/octet-stream';
-}
-
-export function getFileStream(fullPath: string) {
-  console.log("fullPath:", fullPath);
+export async function getFileStream(fullPath: string) {
+  console.log("Processing file:", fullPath);
 
   if (!fs.existsSync(fullPath)) {
     throw new Error('Dataset file not found');
   }
 
-  const stream = fs.readFileSync(fullPath, 'utf8');
-  return JSON.parse(stream);
+  try {
+    // Validate and parse the file
+    const result = await fileValidationService.validateFile(fullPath);
+
+    console.log('File validation successful:', {
+      type: result.detectedType,
+      size: result.size
+    });
+
+    return {
+      content: result.parsedContent,
+      contentType: result.mimeType,
+      fileType: result.detectedType,
+      size: result.size
+    };
+
+  } catch (error: any) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(`File processing failed: ${error.message}`, 500);
+  }
 }

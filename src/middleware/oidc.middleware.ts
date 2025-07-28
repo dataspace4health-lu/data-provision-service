@@ -35,6 +35,7 @@ export async function authenticateToken(req: Request, res: Response, next: NextF
     const authHeader = req.headers.authorization;
     console.log("authHeader:", authHeader);
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log("No Bearer token found in request headers");
       return unauthorized(res);
     }
 
@@ -54,8 +55,16 @@ export async function authenticateToken(req: Request, res: Response, next: NextF
 }
 
 function unauthorized(res: Response) {
+  console.log("Unauthorized access attempt");
+
+  const authHeader = [
+    `Bearer realm="example"`,
+    `error="invalid_token"`,
+    `error_description="Token is missing or invalid"`,
+    `authorization_uri="${OIDC_ISSUER}/token"`
+  ].join(', ');
   res.status(401)
-    .set('WWW-Authenticate', `Bearer realm="example", error="invalid_token", error_description="Token is missing or invalid", authorization_uri="${OIDC_ISSUER}/token"`)
+    .set('WWW-Authenticate', authHeader)
     .json({
       error: "unauthorized",
       error_description: "Access token is missing or invalid"
