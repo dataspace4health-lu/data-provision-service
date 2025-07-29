@@ -9,6 +9,8 @@ dotenv.config();
 
 const app: Express = express();
 const port = PORT || 3000;
+const basePath = process.env.BASE_PATH || '';
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 app.use(express.json());
 app.use(cors({
@@ -16,11 +18,20 @@ app.use(cors({
 }));
 
 // Routes
-app.get("/", (req: Request, res: Response) => {
+app.get(`${basePath}/`, (req: Request, res: Response) => {
     res.send("Express + TypeScript Server");
 });
 
-app.use('/api/files', datasetRoutes);
+// Health check endpoint
+app.get(`${basePath}/health`, (req: Request, res: Response) => {
+    res.status(200).json({ 
+        status: "healthy", 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime() 
+    });
+});
+
+app.use(`${basePath}/api/files`, datasetRoutes);
 
 // Swagger
 setupSwagger(app);
