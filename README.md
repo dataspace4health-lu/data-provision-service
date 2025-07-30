@@ -15,7 +15,7 @@ A secure REST API service built with Express.js and TypeScript for delivering da
 
 - Node.js 18+ 
 - npm or yarn
-- An OIDC provider (Keycloak, Auth0, Google, etc.)
+- An OIDC provider (Keycloak, Idp kit, Google, etc.)
 
 ## Getting Started
 
@@ -115,9 +115,24 @@ This service uses OIDC (OpenID Connect) for authentication. You need to:
 1. Obtain an access token from your OIDC provider
 2. Include the token in the `Authorization` header as `Bearer <token>`
 
+### Current Implementation
+
+**⚠️ Important Note**: Currently, we can configure this service to use **Keycloak** as the OIDC issuer for authentication. 
+
+### Future Plans
+
+**🔄 Planned Migration**: We plan to migrate from Keycloak to **IDP Kit** as the OIDC issuer in future releases.
+
+**Migration Considerations**:
+- Environment variables will need to be updated
+- OIDC endpoints and configuration may change
+- Additional IDP Kit-specific configurations may be required
+- Authentication flow should remain compatible due to OIDC standard compliance
+
 ### Supported OIDC Providers
 
-- **Keycloak**
+- **Keycloak** (current)
+- **IDP Kit** (planned future implementation)
 - Any OIDC-compliant provider
 
 ## Testing
@@ -173,6 +188,8 @@ src/
 - `npm test` - Run tests (to be implemented)
 
 ## Environment Variables
+
+**📝 Migration Note**: The OIDC-related environment variables are currently configured for Keycloak but could be updated when migrating to IDP Kit.
 
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
