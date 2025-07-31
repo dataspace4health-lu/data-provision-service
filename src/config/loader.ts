@@ -8,6 +8,7 @@ export const {
     NODE_ENV,
     PORT,
     BASE_URL,
+    BASE_PATH,
     BASE_FILE_PATH,
     OIDC_ISSUER,
     OIDC_CLIENT_ID = 'client-id',

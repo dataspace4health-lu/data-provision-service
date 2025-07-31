@@ -2,7 +2,9 @@
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { Express } from "express";
-import { BASE_URL } from "./loader";
+import dotenv from "dotenv";
+import { BASE_URL, BASE_PATH} from "./loader";
+dotenv.config();
 
 const options: swaggerJSDoc.Options = {
   definition: {
@@ -14,7 +16,7 @@ const options: swaggerJSDoc.Options = {
     },
     servers: [
       {
-        url: BASE_URL || "http://localhost:3000", // fallback in case BASE_URL is not defined
+        url: `${BASE_URL}${BASE_PATH}`, // Combine BASE_URL + BASE_PATH
       },
     ],
     components: {
@@ -38,6 +40,5 @@ const options: swaggerJSDoc.Options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 export const setupSwagger = (app: Express) => {
-  const basePath = process.env.BASE_PATH || '';
-  app.use(`${basePath}/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use(`${BASE_PATH}/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
