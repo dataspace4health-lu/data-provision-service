@@ -34,7 +34,11 @@ const options: swaggerJSDoc.Options = {
       }
     ],
   },
-  apis: ["src/routes/*.ts"], // ✅ Path to your API route files
+  apis: 
+    // For both development (TypeScript) and production (JavaScript) environments
+    process.env.NODE_ENV === "production" 
+      ? ["dist/routes/*.js"] 
+      : ["src/routes/*.ts"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
