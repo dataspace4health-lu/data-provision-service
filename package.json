@@ -1,7 +1,7 @@
 {
-  "name": "data-delivery",
+  "name": "data-provision-service",
   "version": "1.0.0",
-  "description": "REST service for Data delivery",
+  "description": "REST service for Data provisioning",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",

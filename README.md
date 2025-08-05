@@ -1,4 +1,4 @@
-# Data Delivery REST Service
+# Data Provision REST Service
 
 A secure REST API service built with Express.js and TypeScript for delivering data assets with OIDC authentication. This service provides authenticated access to various file formats including CSV, TXT, and JSON files.
 

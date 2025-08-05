@@ -10,7 +10,7 @@ const options: swaggerJSDoc.Options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "My Express API with Swagger",
+      title: "Data Provisioning REST API",
       version: "1.0.0",
       description: "API documentation",
     },
