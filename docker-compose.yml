@@ -11,7 +11,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - BASE_URL=http://10.168.191.10:3000
+      - BASE_URL=http://localhost:3000
       - BASE_PATH=/data/api/v1
       - BASE_FILE_PATH=./data
       - OIDC_ISSUER=https://dataspace4health.local/iam/realms/ds4h
