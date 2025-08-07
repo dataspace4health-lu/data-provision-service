@@ -47,6 +47,7 @@ OIDC_ISSUER=https://your-oidc-provider.com
 OIDC_CLIENT_ID=your-client-id
 OIDC_CLIENT_SECRET=your-client-secret
 OIDC_REDIRECT_URI=http://localhost:3000/callback
+OIDC_BEARER_REALM=ds4h
 ```
 
 ### 3. Add Data Files
@@ -199,6 +200,7 @@ src/
 | `OIDC_CLIENT_ID` | OIDC client ID | Yes | - |
 | `OIDC_CLIENT_SECRET` | OIDC client secret | Yes | - |
 | `OIDC_REDIRECT_URI` | OIDC redirect URI | No | - |
+| `OIDC_BEARER_REALM` | Realm | No | ds4h |
 
 ## Security
 

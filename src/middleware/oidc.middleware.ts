@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Client, Issuer } from 'openid-client';
-import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_ISSUER, OIDC_REDIRECT_URI } from '../config/loader';
+import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_ISSUER, OIDC_REDIRECT_URI, OIDC_BEARER_REALM } from '../config/loader';
 
 let issuer: Issuer<Client> | null = null;
 let client: Client;
@@ -58,7 +58,7 @@ function unauthorized(res: Response) {
   console.log("Unauthorized access attempt");
 
   const authHeader = [
-    `Bearer realm="example"`,
+    `Bearer realm="${OIDC_BEARER_REALM}"`,
     `error="invalid_token"`,
     `error_description="Token is missing or invalid"`,
     `authorization_uri="${OIDC_ISSUER}/token"`
