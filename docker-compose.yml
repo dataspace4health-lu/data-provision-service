@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  data-provision:
+    build:
+      context: .
+      target: production
+    image: localhost:5432/data-provision:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - BASE_URL=http://localhost:3000
+      - BASE_PATH=/data/api/v1
+      - BASE_FILE_PATH=./data
+      - OIDC_ISSUER=https://dataspace4health.local/iam/realms/ds4h
+      - OIDC_CLIENT_ID=data-provision-service
+      - OIDC_CLIENT_SECRET=ALcbdI2VfxMa0hYVg2yo28hNSYGUzEnY
+      - OIDC_CALLBACK_URL=
+      - OIDC_REDIRECT_URI=
