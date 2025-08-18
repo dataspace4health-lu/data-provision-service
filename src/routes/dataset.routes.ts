@@ -7,7 +7,7 @@ import { authenticateToken } from "../middleware/oidc.middleware";
 const router = Router();
 /**
  * @swagger
- * /api/files/{filename}:
+ * /files/{filename}:
  *   get:
  *     summary: Retrieve a data asset by filename
  *     parameters:

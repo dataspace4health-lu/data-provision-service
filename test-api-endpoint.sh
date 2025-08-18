@@ -75,11 +75,11 @@ fi
 echo "✅ Token fetched successfully"
 echo ""
 
-# Test the main endpoint - GET /api/files/{filename}
-echo "Testing GET /api/files/$FILENAME endpoint..."
-echo "Making request to: $SERVICE_URL/api/files/$FILENAME"
+# Test the main endpoint - GET /files/{filename}
+echo "Testing GET /files/$FILENAME endpoint..."
+echo "Making request to: $SERVICE_URL/files/$FILENAME"
 
-RESPONSE=$(curl -w "\n%{http_code}" --silent --location "$SERVICE_URL/api/files/$FILENAME" \
+RESPONSE=$(curl -w "\n%{http_code}" --silent --location "$SERVICE_URL/files/$FILENAME" \
   --header "Authorization: Bearer $TOKEN")
 
 # Extract HTTP status code (last line)

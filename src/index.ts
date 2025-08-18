@@ -19,7 +19,7 @@ app.use(cors({
 
 // Routes
 app.get(`${basePath}/`, (req: Request, res: Response) => {
-    res.send("Express + TypeScript Server");
+    res.redirect(`${basePath}/api-docs/`);
 });
 
 // Health check endpoint
@@ -31,7 +31,7 @@ app.get(`${basePath}/health`, (req: Request, res: Response) => {
     });
 });
 
-app.use(`${basePath}/api/files`, datasetRoutes);
+app.use(`${basePath}/files`, datasetRoutes);
 
 // Swagger
 setupSwagger(app);
