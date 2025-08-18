@@ -15,4 +15,5 @@ export const {
     OIDC_CLIENT_SECRET,
     OIDC_CALLBACK_URL,
     OIDC_REDIRECT_URI,
+    OIDC_BEARER_REALM = 'ds4h',
 } = process.env;
