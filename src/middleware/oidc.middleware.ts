@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-import { Request, Response, NextFunction } from 'express';
-import { Client, Issuer } from 'openid-client';
-import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_ISSUER, OIDC_REDIRECT_URI, OIDC_BEARER_REALM } from '../config/loader';
-=======
 import { Request, Response, NextFunction } from "express";
 import { Client, Issuer } from "openid-client";
 import {
@@ -13,7 +8,6 @@ import {
   OIDC_LOGIN_URL,
   OIDC_IDP_ALIAS,
 } from "../config/loader";
->>>>>>> Stashed changes
 
 let issuer: Issuer<Client> | null = null;
 let client: Client;
@@ -74,17 +68,6 @@ function unauthorized(req: Request, res: Response) {
   console.log("Unauthorized access attempt");
   console.log("req", req);
 
-<<<<<<< Updated upstream
-  const authHeader = [
-    `Bearer realm="${OIDC_BEARER_REALM}"`,
-    `error="invalid_token"`,
-    `error_description="Token is missing or invalid"`,
-    `authorization_uri="${OIDC_ISSUER}/token"`
-  ].join(', ');
-  res.status(401)
-    .set('WWW-Authenticate', authHeader)
-    .json({
-=======
   // Get the original request URL to use as redirect_uri
   const protocol = req.headers["x-forwarded-proto"] || req.protocol;
   const host = req.headers["x-forwarded-host"] || req.headers.host;
@@ -113,7 +96,6 @@ function unauthorized(req: Request, res: Response) {
     ].join(", ");
 
     res.status(401).set("WWW-Authenticate", authHeader).json({
->>>>>>> Stashed changes
       error: "unauthorized",
       error_description: "Access token is missing or invalid",
     });
