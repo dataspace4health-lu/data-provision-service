@@ -67,12 +67,6 @@ export async function authenticateToken(
 
 function unauthorized(req: Request, res: Response) {
   console.log("Unauthorized access attempt");
-  console.log("req", req);
-
-  // Get the original request URL to use as redirect_uri
-  // const protocol = req.headers['x-forwarded-proto'] || req.protocol;
-  // const host = req.headers['x-forwarded-host'] || req.headers.host;
-  // const originalUrl = req.originalUrl || req.url;
   const protocol = req.headers["x-forwarded-proto"] || req.protocol;
   const host = req.host;
   const originalUrl = req.originalUrl;
