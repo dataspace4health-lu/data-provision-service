@@ -71,7 +71,6 @@ function unauthorized(req: Request, res: Response) {
   const host = req.host;
   const originalUrl = req.originalUrl;
   const fullRequestUrl = `${protocol}://${host}${originalUrl}`;
-  console.log("fullRequestUrl", fullRequestUrl);
   const authorizationUri = `${OIDC_LOGIN_URL}?client_id=${OIDC_CLIENT_ID}&redirect_uri=${encodeURIComponent(
     fullRequestUrl
   )}&response_type=code&scope=openid&kc_idp_hint=${OIDC_IDP_ALIAS}`;
@@ -87,10 +86,10 @@ function unauthorized(req: Request, res: Response) {
     // No User-Agent, return a 401 Unauthorized with WWW-Authenticate header
     console.log("No User-Agent found, returning 401 Unauthorized");
     const authHeader = [
-      `Bearer realm='${OIDC_BEARER_REALM}'`,
-      `error='invalid_token'`,
-      `error_description='Token is missing or invalid'`,
-      `authorization_uri='${OIDC_ISSUER}/token'`,
+      `Bearer realm="${OIDC_BEARER_REALM}"`,
+      `error="invalid_token"`,
+      `error_description="Token is missing or invalid"`,
+      `authorization_uri="${OIDC_ISSUER}/token"`,
     ].join(", ");
 
     res.status(401).set("WWW-Authenticate", authHeader).json({
