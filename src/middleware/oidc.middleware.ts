@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { Client, Issuer } from "openid-client";
+import { Request, Response, NextFunction } from 'express';
+import { Client, Issuer } from 'openid-client';
 import {
   OIDC_CLIENT_ID,
   OIDC_CLIENT_SECRET,
@@ -8,7 +8,7 @@ import {
   OIDC_LOGIN_URL,
   OIDC_IDP_ALIAS,
   OIDC_BEARER_REALM,
-} from "../config/loader";
+} from '../config/loader';
 
 let issuer: Issuer<Client> | null = null;
 let client: Client;
@@ -17,20 +17,20 @@ async function initializeOidcClient(): Promise<Client> {
   try {
     issuer = await Issuer.discover(`${OIDC_ISSUER}`);
     client = new issuer.Client({
-      client_id: OIDC_CLIENT_ID || "client-id",
+      client_id: OIDC_CLIENT_ID || 'client-id',
       client_secret: OIDC_CLIENT_SECRET,
-      redirect_uris: [OIDC_REDIRECT_URI || "http://localhost:3000/callback"],
-      response_types: ["code"],
+      redirect_uris: [OIDC_REDIRECT_URI || 'http://localhost:3000/callback'],
+      response_types: ['code'],
     });
 
-    console.log("OIDC client initialized successfully");
+    console.log('OIDC client initialized successfully');
 
-    await client.grant({ grant_type: "client_credentials" });
+    await client.grant({ grant_type: 'client_credentials' });
 
-    console.log("OIDC client credentials verified successfully");
+    console.log('OIDC client credentials verified successfully');
     return client;
   } catch (error) {
-    console.error("OIDC initialization failed:", error);
+    console.error('OIDC initialization failed:', error);
     throw error;
   }
 }
@@ -45,16 +45,16 @@ export async function authenticateToken(
       await initializeOidcClient();
     }
     const authHeader = req.headers.authorization;
-    console.log("authHeader:", authHeader);
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      console.log("No Bearer token found in request headers");
+    console.log('authHeader:', authHeader);
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('No Bearer token found in request headers');
       return unauthorized(req, res);
     }
 
-    const token = authHeader.split(" ")[1];
-    console.log("TOKEN:", token);
+    const token = authHeader.split(' ')[1];
+    console.log('TOKEN:', token);
     const userInfo = await client.userinfo(token); // simplest way to validate
-    console.log("userInfo:", userInfo);
+    console.log('userInfo:', userInfo);
 
     // Optionally attach user info to req for downstream use
     (req as any).user = userInfo;
@@ -66,25 +66,26 @@ export async function authenticateToken(
 }
 
 function unauthorized(req: Request, res: Response) {
-  console.log("Unauthorized access attempt");
-  const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+  console.log('Unauthorized access attempt');
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
   const host = req.host;
   const originalUrl = req.originalUrl;
   const fullRequestUrl = `${protocol}://${host}${originalUrl}`;
+  console.log('fullRequestUrl', fullRequestUrl);
   const authorizationUri = `${OIDC_LOGIN_URL}?client_id=${OIDC_CLIENT_ID}&redirect_uri=${encodeURIComponent(
     fullRequestUrl
   )}&response_type=code&scope=openid&kc_idp_hint=${OIDC_IDP_ALIAS}`;
 
   // Check if User-Agent header exists
-  const userAgent = req.headers["user-agent"];
+  const userAgent = req.headers['user-agent'];
 
   if (userAgent) {
     // User-Agent exists, return a redirect response
-    console.log("User-Agent found, redirecting to authorization URI");
+    console.log('User-Agent found, redirecting to authorization URI');
     return res.redirect(302, authorizationUri);
   } else {
     // No User-Agent, return a 401 Unauthorized with WWW-Authenticate header
-    console.log("No User-Agent found, returning 401 Unauthorized");
+    console.log('No User-Agent found, returning 401 Unauthorized');
     const authHeader = [
       `Bearer realm="${OIDC_BEARER_REALM}"`,
       `error="invalid_token"`,
@@ -93,8 +94,8 @@ function unauthorized(req: Request, res: Response) {
     ].join(", ");
 
     res.status(401).set("WWW-Authenticate", authHeader).json({
-      error: "unauthorized",
-      error_description: "Access token is missing or invalid",
+      error: 'unauthorized',
+      error_description: 'Access token is missing or invalid',
     });
   }
 }
