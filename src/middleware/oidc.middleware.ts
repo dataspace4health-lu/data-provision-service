@@ -91,9 +91,9 @@ function unauthorized(req: Request, res: Response) {
       `error="invalid_token"`,
       `error_description="Token is missing or invalid"`,
       `authorization_uri="${OIDC_ISSUER}/token"`,
-    ].join(", ");
+    ].join(', ');
 
-    res.status(401).set("WWW-Authenticate", authHeader).json({
+    res.status(401).set('WWW-Authenticate', authHeader).json({
       error: 'unauthorized',
       error_description: 'Access token is missing or invalid',
     });
