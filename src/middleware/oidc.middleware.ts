@@ -44,16 +44,13 @@ export async function authenticateToken(
     if (!issuer) {
       await initializeOidcClient();
     }
-    const authHeader = req.headers.authorization;
-    console.log('authHeader:', authHeader);
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      console.log('No Bearer token found in request headers');
+
+    if (!(await isAuthorized(req))) {
+      console.log("Unauthoriued");
       return unauthorized(req, res);
     }
 
-    const token = authHeader.split(' ')[1];
-    console.log('TOKEN:', token);
-    const userInfo = await client.userinfo(token); // simplest way to validate
+    const userInfo = await client.userinfo(req.session.token || ''); // simplest way to validate
     console.log('userInfo:', userInfo);
 
     // Optionally attach user info to req for downstream use
@@ -61,27 +58,63 @@ export async function authenticateToken(
 
     next();
   } catch (err) {
+    console.error((err as Error).name + ": " + (err as Error).message);
     return unauthorized(req, res);
   }
 }
 
+async function isAuthorized(req: Request) : Promise<boolean> {
+  if (req.session.token) {
+    console.log('TOKEN already saved:', req.session.token);
+    return true;
+  }
+  
+  const authHeader = req.headers.authorization;
+  console.log('authHeader:', authHeader);
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    console.log('TOKEN:', token);
+
+    req.session.token = token;   // Save token in session
+    return true;
+  }
+
+  const code = req.query.code as string;
+  console.log('request query:', req.query);
+  console.log('request query code:', code);
+  const fullRequestUrl = getOriginalFullUrl(req);
+  console.log('request url:', fullRequestUrl);
+  if(code) {
+    // Exchange authorization code for tokens
+    const tokenSet = await client.grant({
+      grant_type: 'authorization_code',
+      code: code, // Replace with the actual authorization code
+      redirect_uri: fullRequestUrl.origin + fullRequestUrl.pathname, // Must match the redirect URI used in the authorization request
+    });
+
+    console.log("Got token set: ", tokenSet);
+
+    req.session.token = tokenSet.access_token;   // Save token in session
+    return true;
+  }
+
+  return false;
+}
+
 function unauthorized(req: Request, res: Response) {
   console.log('Unauthorized access attempt');
-  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
-  const host = req.host;
-  const originalUrl = req.originalUrl;
-  const fullRequestUrl = `${protocol}://${host}${originalUrl}`;
+  const fullRequestUrl = getOriginalFullUrl(req);
   console.log('fullRequestUrl', fullRequestUrl);
   const authorizationUri = `${OIDC_LOGIN_URL}?client_id=${OIDC_CLIENT_ID}&redirect_uri=${encodeURIComponent(
-    fullRequestUrl
+    fullRequestUrl.toString()
   )}&response_type=code&scope=openid&kc_idp_hint=${OIDC_IDP_ALIAS}`;
 
   // Check if User-Agent header exists
   const userAgent = req.headers['user-agent'];
-
   if (userAgent) {
     // User-Agent exists, return a redirect response
-    console.log('User-Agent found, redirecting to authorization URI');
+    console.log('User-Agent found:', userAgent);
+    console.log('Redirecting to authorization URI');
     return res.redirect(302, authorizationUri);
   } else {
     // No User-Agent, return a 401 Unauthorized with WWW-Authenticate header
@@ -98,4 +131,10 @@ function unauthorized(req: Request, res: Response) {
       error_description: 'Access token is missing or invalid',
     });
   }
+}
+
+function getOriginalFullUrl(req: Request) : URL {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.headers.host;
+  return new URL(`${protocol}://${host}${req.originalUrl}`);
 }

@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import session from "express-session";
 import dotenv from "dotenv";
 import cors from "cors";
 import { setupSwagger } from "./config/swagger";
@@ -15,6 +16,12 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 app.use(express.json());
 app.use(cors({
     origin: "*",
+}));
+app.use(session({
+    secret: 'your-secret-key', // Replace with a secure key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true } // Set to true if using HTTPS
 }));
 
 // Routes
