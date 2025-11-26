@@ -1,3 +1,8 @@
+/*
+ * Copyright 2025 NTT DATA Luxembourg
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import fs from 'fs';
 import { parse as csvParse } from 'csv-parse';
 import { AppError } from '../utils/errors/custom.error';

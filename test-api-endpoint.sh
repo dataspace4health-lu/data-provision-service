@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2025 NTT DATA Luxembourg
+# SPDX-License-Identifier: Apache-2.0
+
 # Test script for data delivery REST service
 # Usage: ./test-data-delivery.sh [filename]
 # Example: ./test-data-delivery.sh my-data.csv

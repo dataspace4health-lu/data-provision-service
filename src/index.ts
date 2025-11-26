@@ -1,3 +1,8 @@
+/*
+ * Copyright 2025 NTT DATA Luxembourg
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import express, { Express, Request, Response } from "express";
 import session from "express-session";
 import dotenv from "dotenv";
