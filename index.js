@@ -1,3 +1,8 @@
+//
+// Copyright 2025 NTT DATA Luxembourg
+// SPDX-License-Identifier: Apache-2.0
+//
+
 const express = require('express')
 const app = express()
 const port = 3000

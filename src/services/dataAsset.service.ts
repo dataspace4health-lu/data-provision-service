@@ -1,3 +1,8 @@
+/*
+ * Copyright 2025 NTT DATA Luxembourg
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import fs from 'fs';
 import path from 'path';
 import { BASE_FILE_PATH } from '../config/loader';

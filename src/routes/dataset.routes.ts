@@ -1,3 +1,8 @@
+/*
+ * Copyright 2025 NTT DATA Luxembourg
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { Router } from "express";
 // import { oidcMiddleware } from "../middleware/auth.middleware";
 import { getDataAsset } from "../controllers/dataAsset.controller";

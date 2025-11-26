@@ -1,3 +1,8 @@
+/*
+ * Copyright 2025 NTT DATA Luxembourg
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { Request, Response, NextFunction } from 'express';
 import { Client, Issuer } from 'openid-client';
 import {

@@ -1,6 +1,12 @@
 # Data Provision REST Service
 
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 A secure REST API service built with Express.js and TypeScript for delivering data assets with OIDC authentication. This service provides authenticated access to various file formats including CSV, TXT, and JSON files.
+
+## Project Purpose
+
+This project delivers a ready-to-use reference service for securely sharing structured data assets with external clients. It implements OpenID Connect authentication, basic file validation, and OpenAPI documentation so organizations can onboard contributors and adopters with minimal friction.
 
 ## Features
 
@@ -103,6 +109,29 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
      http://localhost:3000/api/files/sample.csv
 ```
 
+## Usage Examples
+
+**Download a CSV file (curl):**
+```bash
+curl -L -H "Authorization: Bearer $ACCESS_TOKEN" \
+  http://localhost:3000/api/files/sample.csv -o sample.csv
+```
+
+**Fetch within a Node.js script:**
+```js
+import https from 'https';
+
+https.get(
+  {
+    host: 'localhost',
+    port: 3000,
+    path: '/api/files/sample.txt',
+    headers: { Authorization: `Bearer ${process.env.ACCESS_TOKEN}` }
+  },
+  (res) => res.pipe(process.stdout)
+);
+```
+
 **Responses:**
 - `200 OK` - File delivered successfully
 - `401 Unauthorized` - Invalid or missing token
@@ -159,6 +188,18 @@ curl -v http://localhost:3000/api/files/sample.csv
 # Should return 401 Unauthorized
 ```
 
+## Contributing
+
+We welcome community contributions! Please review [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow, testing expectations, and how to report issues.
+
+## Security
+
+If you discover a vulnerability, please follow the guidance in [SECURITY.md](SECURITY.md) and avoid sharing sensitive details publicly.
+
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE). See the [NOTICE](NOTICE) file for additional information about copyright ownership.
+
 ## Project Structure
 
 ```
@@ -186,7 +227,7 @@ src/
 - `npm run dev` - Start development server with hot reload
 - `npm run build` - Build TypeScript to JavaScript
 - `npm start` - Start production server
-- `npm test` - Run tests (to be implemented)
+- `npm test` - Run the Node.js test suite
 
 ## Environment Variables
 

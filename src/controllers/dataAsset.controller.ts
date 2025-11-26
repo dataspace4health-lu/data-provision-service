@@ -1,3 +1,8 @@
+/*
+ * Copyright 2025 NTT DATA Luxembourg
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { Request, Response } from 'express';
 import { getFileStream } from '../services/dataAsset.service';
 import { BASE_FILE_PATH } from '../config/loader';
